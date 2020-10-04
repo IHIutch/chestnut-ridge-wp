@@ -1,0 +1,59 @@
+/** Change the size and colour of the widget title */
+
+
+/** Make each event standout with a new background and border */
+.tribe-events-list-widget li.tribe-events-list-widget-events {
+	padding: 0px;
+	margin:0 0 20px 0;
+}
+
+/** Make each event title uppercase and underline them */
+.tribe-events-list-widget h4.entry-title a {
+	text-decoration: none;
+	text-transform: none;
+	text-align:left;
+	font-size: 16px !important;
+	line-height:24px;
+	float: left;
+	color:#3e634e  !important;
+	padding-bottom:0px;
+
+}
+
+.tribe-events-list-widget h4.entry-title {
+	text-decoration: none;
+	text-transform: none;
+	text-align:left;
+	font-size: 16px !important;
+	line-height:18px !important;
+	float: left;
+	color:#3e634e !important;
+	padding-bottom:0px;
+}
+
+#tribe-events #tribe-events-content.tribe-events-single .tribe-events-single-event-description p {
+	color: #4c4c4c;
+	font-weight: normal;
+	font-size: 19px !important;
+	line-height: 24px;
+}
+
+#sidebar1.et_pb_widget_area .et_pb_widget:not(.woocommerce) a
+	width: 100%;
+}
+
+.tribe-events-list-widget {
+	font-size: 16px !important;
+	line-height: 24px;
+}
+
+
+/** Make the event date/time information a little more prominent */
+.tribe-events-list-widget div.duration {
+	color: #000000;
+	font-weight: normal;
+	font-size: 15px !important;
+	float: left;
+	/* transform: rotate( -4deg ); */
+
+}

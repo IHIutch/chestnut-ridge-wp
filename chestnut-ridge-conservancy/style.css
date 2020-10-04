@@ -1,0 +1,179 @@
+/*
+Theme Name:  CHESTNUT RIDGE CONSERVANCY
+Theme URI:   http://linemates.com/crc2
+Version:     1.0
+Description: A child theme of Divi. This is a custom child theme created for our site Chestnut Ridge Conservancy.
+Author:      ChestnutRidgeConservancy
+Author URI:  http://linemates.com/crc2
+Template:    Divi
+*/
+
+
+@import url("../Divi/style.css");
+
+
+/***********************************************************************
+Caution: do not remove this to keep Divi Children Engine always updated 
+Divi Children Engine version: 1.0.0
+***********************************************************************/
+
+/*------------------------------[FONT ICONS]-----------------------------*/
+/*--[Created by Divi Children, http://divi4u.com/divi-children-plugin/]--*/
+/*-----------------------------------------------------------------------*/
+
+.icon_tags, .icon_profile, .icon_chat, .icon_clipboard, .icon_calendar {
+	font-family: 'ETmodules';
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	font-size: 16px;
+	color: #318EC3;
+}
+.icon_tags:before {
+	content: "\e07c";
+	padding: 0px 5px 0 0;
+}
+.icon_profile:before {
+	content: "\e08a";
+	padding: 0 5px 0 0;
+}
+.icon_chat:before {
+	content: "\e066";
+	padding: 0 5px 0 20px;
+}
+.icon_clipboard:before {
+	content: "\e0e6";
+	padding: 0 5px 0 20px;
+}
+.icon_calendar:before {
+	content: "\e023";
+	padding: 0 5px 0 20px;
+}
+
+p {font-size:18px}
+
+h1, h2, h3, h4, h5, h6 {padding-bottom: 0px;}
+
+h2 {padding-bottom:.6em}
+h4 {padding-bottom:.6em}
+
+#footer-widgets {padding-top:40px;}
+
+.et_fixed_nav #logo {margin-bottom:0; max-height:100%;}
+.et_pb_section {padding:0; position:relative;}
+.et_pb_row {padding: 20px 0 0;}
+.et_header_style_centered #logo {padding: 0}
+.et_pb_widget a {color: #ffffff; text-decoration: none;}
+
+
+#logo {margin-bottom: 10px;}
+
+#top-menu a {font-size: 1.6em;}
+#top-menu li, .fullwidth-menu li {display:inline-block; font-size:1em; padding-right:4em;}
+#top-menu li li a, .fullwidth-menu li li a {padding: 6px 5px; width: 240px;}
+
+
+body {line-height:1.3em}
+
+.nav li ul {width: 250px;}
+
+
+
+/*- YOU CAN INCLUDE THE CUSTOM CODE FOR YOUR CHILD THEME BELOW THIS LINE-*/
+
+
+/*------------------------------------------------*/
+/*---------------[RESPONSIVE LAYOUTS]-------------*/
+/*------------------------------------------------*/
+
+@media only screen and ( min-width: 981px ) {
+
+p {font-size:18px}
+
+h1 {font-size: 30px; font-weight:700}
+h2 {font-size: 24px; font-weight:500}
+h4 {font-size: 18px; font-weight:700;text-align:center;line-height:1.4em}
+
+#left-area ol, .entry-content ol, .comment-content ol {line-height: 1.7em; list-style-position: outside; list-style-type: decimal; font-size: 18px; padding-left:1.5em;}
+#left-area ul, .entry-content ul, .comment-content ul {line-height: 1.7em; list-style-type: disc; font-size: 18px;padding-left:1.5em;}
+}
+
+/*-------------------[960px]------------------*/
+@media only screen and ( min-width: 981px ) and ( max-width: 1100px ) {
+
+p {font-size:18px}
+
+h1 {font-size: 30px; font-weight:700}
+h2 {font-size: 24px; font-weight:500}
+h4 {font-size: 14px; font-weight:700;text-align:center;line-height:1.4em}
+
+#left-area ol, .entry-content ol, .comment-content ol {line-height: 1.7em; list-style-position: outside; list-style-type: decimal; font-size: 18px;padding-left:1.5em;}
+#left-area ul, .entry-content ul, .comment-content ul {line-height: 1.7em; list-style-type: disc; font-size: 18px;padding-left:1.5em;}
+}
+
+
+/*-------------------[768px]------------------*/
+@media only screen and ( max-width: 980px ) {
+
+p {font-size:18px}
+
+h1 {font-size: 30px; font-weight:700}
+h2 {font-size: 24px; font-weight:500}
+h4 {font-size: 14px; font-weight:700;text-align:center;line-height:1.4em}
+
+#left-area ol, .entry-content ol, .comment-content ol {line-height: 1.7em; list-style-position: outside; list-style-type: decimal; font-size: 18px; padding-left:1.5em;}
+#left-area ul, .entry-content ul, .comment-content ul {line-height: 1.7em; list-style-type: disc; font-size: 18px;padding-left:1.5em;}
+}
+
+@media only screen and ( min-width: 768px ) and ( max-width: 980px ) {
+
+p {font-size:16px}
+h1 {font-size: 24px; font-weight:700}
+h2 {font-size: 20px; font-weight:500}
+h4 {font-size: 14px; font-weight:700;text-align:center;line-height:1.4em}
+
+#left-area ol, .entry-content ol, .comment-content ol {line-height: 1.7em; list-style-position: outside; list-style-type: decimal; font-size: 16px;padding-left:1.5em;}
+#left-area ul, .entry-content ul, .comment-content ul {line-height: 1.7em; list-style-type: disc; font-size: 16px;padding-left:1.5em;}
+
+}
+
+@media screen and ( max-width: 782px ) {
+
+p {font-size:16px}
+h1 {font-size: 24px; font-weight:700}
+h2 {font-size: 20px; font-weight:500}
+h4 {font-size: 13px; font-weight:700;text-align:center;line-height:1.4em}
+
+#left-area ol, .entry-content ol, .comment-content ol {line-height: 1.7em; list-style-position: outside; list-style-type: decimal; font-size: 16px;padding-left:1.5em;}
+#left-area ul, .entry-content ul, .comment-content ul {line-height: 1.7em; list-style-type: disc; font-size: 16px;padding-left:1.5em;}
+}
+
+/*-------------------[480px]------------------*/
+@media only screen and ( max-width: 767px ) {
+
+p {font-size:15px}
+h1 {font-size: 22px; font-weight:700}
+h2 {font-size: 18px; font-weight:500}
+h4 {font-size: 13px; font-weight:700;text-align:center;line-height:1.4em}
+
+#left-area ol, .entry-content ol, .comment-content ol {line-height: 1.7em; list-style-position: outside; list-style-type: decimal; font-size: 15px;padding-left:1.5em;}
+#left-area ul, .entry-content ul, .comment-content ul {line-height: 1.7em; list-style-type: disc; font-size: 15px;padding-left:1.5em;}
+}
+
+/*-------------------[320px]------------------*/
+@media only screen and ( max-width: 479px ) {
+
+p {font-size:14px}
+
+h1 {font-size: 18px; font-weight:700}
+h2 {font-size: 16px; font-weight:500}
+h4 {font-size: 12px; font-weight:700;text-align:center;line-height:1.4em}
+
+#left-area ol, .entry-content ol, .comment-content ol {line-height: 1.7em; list-style-position: outside; list-style-type: decimal; font-size: 14px;padding-left:1.5em;}
+#left-area ul, .entry-content ul, .comment-content ul {line-height: 1.7em; list-style-type: disc; font-size: 14px;padding-left:1.5em;}
+}
