@@ -36,12 +36,31 @@ add_filter('acf/pre_save_post', function ($post_id) {
 		// print_r($_POST);
 		$price_field = 'field_5f7a1575d3ff7';
 		$email_field = 'field_5f7b23cc208d3';
+		$name_field = 'field_5f7d26936b718';
 
 		$item_id = $_POST['_acf_post_id'];
-		$price = $_POST['acf'][$price_field];
+		$price = (int)$_POST['acf'][$price_field];
 		$email = $_POST['acf'][$email_field];
+		$name = $_POST['acf'][$name_field];
 
-		update_field($price_field, $price, $item_id);
-		update_field($email_field, $email, $item_id);
+		$oldPrice = (int)get_field('price', $item_id);
+
+		if ($oldPrice < $price) {
+			update_field($price_field, $price, $item_id);
+			update_field($email_field, $email, $item_id);
+			update_field($name_field, $name, $item_id);
+		};
 	}
 }, 10, 1);
+
+add_filter('acf/prepare_field', function ($field) {
+	// Target ACF Form Front only
+	if (is_admin() && !wp_doing_ajax())
+		return $field;
+
+	$field['description']['class'] .= ' small text-muted';
+	$field['wrapper']['class'] .= ' form-group border-0 p-0 mb-3';
+	$field['class'] .= ' form-control';
+
+	return $field;
+});
