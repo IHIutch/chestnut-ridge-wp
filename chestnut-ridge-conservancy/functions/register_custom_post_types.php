@@ -13,6 +13,6 @@ register_post_type('auction-item', [
     // 'with_front' => false,
     // 'slug' => 'careers',
     // ],
-    'supports' => ['title', 'thumbnail'],
+    'supports' => ['title', 'thumbnail', 'revisions'],
     'exclude_from_search' => true
 ]);

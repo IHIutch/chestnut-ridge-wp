@@ -49,6 +49,10 @@ add_filter('acf/pre_save_post', function ($post_id) {
 			update_field($price_field, $price, $item_id);
 			update_field($email_field, $email, $item_id);
 			update_field($name_field, $name, $item_id);
+
+			$update_post = get_post($item_id);
+
+			wp_save_post_revision($update_post);
 		};
 	}
 }, 10, 1);
@@ -63,4 +67,22 @@ add_filter('acf/prepare_field', function ($field) {
 	$field['class'] .= ' form-control';
 
 	return $field;
+});
+
+//ACF - Extend ACF Save Behaviour to ensure revisions include meta
+add_action('_wp_put_post_revision', function ($revision_id) {
+	// bail early if editing in admin
+	if (is_admin())
+		return;
+	//For Non-Admin Cases - ensure the meta data is written to revision as well as post
+	if (!empty($_POST['acf'])) {
+		foreach ($_POST['acf'] as $k => $v) {
+			// bail early if $value is not is a field_key
+			if (!acf_is_field_key($k)) {
+				continue;
+			}
+			update_field($k, $v, $revision_id);
+			update_metadata('post', $revision_id, $k, $v);
+		}
+	}
 });
