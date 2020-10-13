@@ -86,3 +86,11 @@ add_action('_wp_put_post_revision', function ($revision_id) {
 		}
 	}
 });
+
+add_filter('use_block_editor_for_post', function () {
+	if ($post->ID === 3766) return false;
+}, 10, 2);
+
+add_filter('wpseo_metabox_prio', function () {
+	return 'low';
+}, 10);

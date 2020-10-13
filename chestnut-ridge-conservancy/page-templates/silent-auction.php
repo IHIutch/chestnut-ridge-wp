@@ -1,6 +1,6 @@
 <?php
 /* 
-Template Name: Silent Auction Template 
+Template Name: Silent Auction Template
 */
 acf_form_head();
 get_header();
@@ -19,6 +19,16 @@ get_header();
         font-size: 80% !important;
         font-weight: 400 !important;
     }
+
+    p {
+        padding-bottom: 0 !important;
+        margin-bottom: .125rem !important;
+        font-size: 1rem !important;
+    }
+
+    ol {
+        list-style: decimal !important;
+    }
 </style>
 
 <?php
@@ -33,13 +43,20 @@ $auction_items = new WP_Query([
 <div class="py-5 bg-light">
     <div class="container">
         <div class="row">
+            <div class="col-12 col-md-10 offset-md-1">
+                <div class="my-5">
+                    <?php the_field('page_content'); ?>
+                </div>
+            </div>
+        </div>
+        <div class="row">
             <?php while ($auction_items->have_posts()) : $auction_items->the_post(); ?>
-                <div class="col-4">
+                <div class="col-12 col-md-6 col-lg-4">
                     <div class="bg-white shadow-sm rounded overflow-hidden mb-4">
                         <img class="w-100" src="<?php the_post_thumbnail_url(); ?>" alt="">
                         <div class="px-3 pt-3">
-                            <h2 class="h3 p-0 text-body"><?php the_title(); ?></h2>
-                            <div class="text-dark">
+                            <h2 class="h4 p-0 text-body"><?php the_title(); ?></h2>
+                            <div class="text-dark mb-4">
                                 <?php the_field('description'); ?>
                             </div>
                         </div>
@@ -68,7 +85,20 @@ $auction_items = new WP_Query([
                             <?php } ?>
                         </div>
                         <div class="p-3">
-                            <button type="button" class="btn btn-success btn-block font-weight-bold" data-toggle="modal" data-target="#auctionItemModal" data-item-id="<?php the_ID(); ?>" data-item-title="<?php the_title(); ?>" data-item-image="<?php the_post_thumbnail_url(); ?>" data-item-desc="<?php the_field('description'); ?>" data-item-price="<?php get_field('price') ? the_field('price') : the_field('starting_bid');  ?>" data-bidder-name="<?php the_field('name'); ?>">Select Item</button>
+                            <?php $rev = wp_get_post_revisions();
+                            $bids = [];
+                            foreach ($rev as $r => $v) {
+                                $item = get_fields($r);
+                                if ($item['name'] && $item['price']) {
+                                    $bids[] = [
+                                        'name' => $item['name'],
+                                        'price' => $item['price']
+                                    ];
+                                }
+                            } ?>
+                            <button type="button" class="btn btn-success btn-block font-weight-bold" data-toggle="modal" data-target="#auctionItemModal" data-item-id="<?php the_ID(); ?>" data-item-title="<?php the_title(); ?>" data-item-image="<?php the_post_thumbnail_url(); ?>" data-item-price="<?php get_field('price') ? the_field('price') : the_field('starting_bid');  ?>" data-bidder-name="<?php the_field('name'); ?>" data-item-bids='<?php echo json_encode($bids); ?>'>
+                                Select Item
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -93,6 +123,7 @@ $auction_items = new WP_Query([
                 <div>
                     <img id="itemImage" class="w-100" src="" alt="">
                 </div>
+                <div class="px-3 py-2 border-bottom" id="noBids"></div>
                 <div class="px-3 py-2 border-bottom" id="bidText">
                     <div>
                         <span class="font-weight-bold">High Bidder</span>
@@ -104,13 +135,17 @@ $auction_items = new WP_Query([
                     <span id="itemBidderName">
                     </span>
                 </div>
+                <div class="px-3 py-2 border-bottom" id="allBids">
+                    <button class="btn btn-link shadow-none px-0" type="button" data-toggle="collapse" data-target="#toggleBidList" aria-expanded="false" aria-controls="toggleBidList">
+                        Show All Bids
+                    </button>
+                    <div class="collapse pl-3" id="toggleBidList">
+                        <ol id="bidList"></ol>
+                    </div>
+                </div>
                 <div class="p-3">
                     <?php
                     acf_form([
-                        // "form_attributes" => array(
-                        //     'method' => 'POST',
-                        //     'action' => admin_url("admin-post.php"),
-                        // ),
                         "post_id" => -1,
                         'html_updated_message'  => '',
                         'instruction_placement' => 'field',
@@ -122,20 +157,6 @@ $auction_items = new WP_Query([
                     ?>
                 </div>
             </div>
-            <!-- <form>
-                <div class="modal-body">
-                    <img id="itemImage" class="w-100" src="" alt="">
-                    <div id="itemDesc"></div>
-                    <div class="form-group">
-                        <label for="itemPrice" class="col-form-label">Your Bid:</label>
-                        <input type="number" class="form-control" id="itemPrice" step="10"></input>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Place Bid!</button>
-                </div>
-            </form> -->
         </div>
     </div>
 </div>
@@ -153,21 +174,40 @@ $auction_items = new WP_Query([
         var image = button.data('item-image');
         var id = button.data('item-id');
         var bidderName = button.data('bidder-name');
+        var bids = button.data('item-bids');
 
         var modal = $(this)
         modal.find('#itemTitle').text(title);
         modal.find('#itemPrice').text(price);
         modal.find('#itemBidderName').text(bidderName);
 
+        var bidList = modal.find('#bidList')
+        if (bids.length) {
+            bids.sort(function(a, b) {
+                return Number(a.price) - Number(b.price);
+            });
+            modal.find('#allBids').removeClass('d-none')
+            modal.find('#allBids button').text('Show All Bids (' + bids.length + ')')
+            bidList.html('');
+            bids.forEach(bid => {
+                bidList.append('<li class="mb-1"><span class="font-weight-bold mr-2">$' + bid.price + '</span>' + bid.name + '</li>')
+            });
+        } else {
+            bidList.html('');
+            modal.find('#allBids').addClass('d-none')
+        }
+
         if (bidderName === '') {
-            modal.find('#bidText').text("Be the Opening Bidder! Starting bid $" + price + ".").addClass("font-weight-bold");
+            modal.find('#noBids').text("Be the Opening Bidder! Starting bid $" + price + ".").addClass("font-weight-bold").removeClass("d-none");
+            modal.find('#bidText').addClass("d-none")
+        } else {
+            modal.find('#noBids').text("").addClass("d-none")
+            modal.find('#bidText').removeClass("d-none")
         }
 
         var newPrice = bidderName === '' ? price : price + 5;
 
         modal.find(bidField).val(newPrice).prop('required', true).attr('min', newPrice).attr('step', 5);
-        // modal.find(bidField);
-        // modal.find(bidField);
         modal.find(emailField).val("").prop('required', true);
         modal.find(nameField).val("").prop('required', true);
 
