@@ -32,13 +32,20 @@ get_header();
 </style>
 
 <?php
+if (isset($_POST['acf'])) {
+    print_r($_POST['acf']);
+    exit;
+}
+
 $auction_items = new WP_Query([
     'post_type' => 'auction-item',
     'post_status' => 'publish',
     'posts_per_page' => -1,
-    'orderby' => 'title',
+    // 'orderby' => 'title',
     'order' => 'ASC',
 ]); ?>
+
+
 
 <div class="py-5 bg-light">
     <div class="container">
@@ -50,7 +57,9 @@ $auction_items = new WP_Query([
             </div>
         </div>
         <div class="row">
-            <?php while ($auction_items->have_posts()) : $auction_items->the_post(); ?>
+            <?php
+            $data = [];
+            while ($auction_items->have_posts()) : $auction_items->the_post(); ?>
                 <div class="col-12 col-md-6 col-lg-4">
                     <div class="bg-white shadow-sm rounded overflow-hidden mb-4">
                         <img class="w-100" src="<?php the_post_thumbnail_url(); ?>" alt="">
@@ -89,21 +98,41 @@ $auction_items = new WP_Query([
                             $bids = [];
                             foreach ($rev as $r => $v) {
                                 $item = get_fields($r);
+                                $bid_date = new DateTime($v->post_modified);
+                                $start_date = new DateTime("10/16/2020");
                                 if ($item['name'] && $item['price']) {
                                     $bids[] = [
+                                        'id' => $v->ID,
                                         'name' => $item['name'],
-                                        'price' => $item['price']
+                                        'price' => $item['price'],
+                                        'email' => $item['email'],
+                                        'date' => $v->post_modified,
                                     ];
                                 }
-                            } ?>
+                            }
+
+                            $data[] = [
+                                'title' => get_the_title(),
+                                'bids' => $bids,
+                                'name' => get_field('name'),
+                                'email' => get_field('email'),
+                                'price' => get_field('price')
+                            ]
+
+                            ?>
+
                             <button type="button" class="btn btn-success btn-block font-weight-bold" data-toggle="modal" data-target="#auctionItemModal" data-item-id="<?php the_ID(); ?>" data-item-title="<?php the_title(); ?>" data-item-image="<?php the_post_thumbnail_url(); ?>" data-item-price="<?php get_field('price') ? the_field('price') : the_field('starting_bid');  ?>" data-bidder-name="<?php the_field('name'); ?>" data-item-bids='<?php echo json_encode($bids); ?>'>
-                                Select Item
+                                Click Here to Bid
                             </button>
                         </div>
                     </div>
                 </div>
             <?php endwhile; ?>
         </div>
+
+        <script>
+            console.log(<?php echo json_encode($data); ?>)
+        </script>
     </div>
 </div>
 
@@ -161,7 +190,28 @@ $auction_items = new WP_Query([
     </div>
 </div>
 
+<div class="modal fade" id="auctionWinnersModal" tabindex="-1" aria-labelledby="auctionWinners" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="auctionWinners">Auction Winners!</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <img class="h-auto w-100" src="https://chestnutridgeconservancy.org/wp-content/uploads/2020/11/Winners.jpg" alt="Auction Winners">
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
+    jQuery(document).ready(function($) {
+        $('#auctionWinnersModal').modal('show')
+    });
+
+
     $('#auctionItemModal').on('show.bs.modal', function(event) {
         var emailField = "#acf-field_5f7b23cc208d3"
         var nameField = "#acf-field_5f7d26936b718"
